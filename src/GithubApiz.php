@@ -24,16 +24,29 @@ class GithubApiz
 
     protected $client;
 
+    /**
+     * @param $url
+     */
     public function setBaseUrl($url)
     {
         $this->baseUrl = $url;
     }
 
+    /**
+     * @return string
+     */
     public function getBaseUrl()
     {
         return $this->baseUrl;
     }
 
+    /**
+     * @param $method
+     * @param array $extra
+     *
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function callRequest($method, $extra = [])
     {
         return json_decode((new RequestHandler($method, $this->callUrl, $extra))->callApi());

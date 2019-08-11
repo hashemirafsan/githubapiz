@@ -30,6 +30,10 @@ class RequestHandler
         $this->request = new Ps7Request($method, $url, $extra);
     }
 
+    /**
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function callApi()
     {
         return $this->http->send($this->request)->getBody()->getContents();

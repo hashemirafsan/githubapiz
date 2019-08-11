@@ -1,6 +1,7 @@
 {
     "name": "hashemirafsan/githubapiz",
     "description": "Github api's",
+    "keywords": ["github", "laravel", "PHP", "github-api"],
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -16,7 +17,6 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
             "HashemiRafsan\\GithubApiz\\": "src/"
         }
     },
