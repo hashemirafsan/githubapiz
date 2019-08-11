@@ -8,8 +8,6 @@
 
 namespace HashemiRafsan\GithubApiz;
 
-
-use GuzzleHttp\Psr7\Request;
 use HashemiRafsan\GithubApiz\Http\RequestHandler;
 use HashemiRafsan\GithubApiz\Traits\Repositories;
 use HashemiRafsan\GithubApiz\Traits\Search;
@@ -36,10 +34,8 @@ class GithubApiz
         return $this->baseUrl;
     }
 
-    public function callRequest()
+    public function callRequest($method, $extra = [])
     {
-        $this->client = new RequestHandler($this->callUrl);
-        $request = new Request('GET', $this->callUrl);
-        return $this->client->http->send($request)->getBody()->getContents();
+        return json_decode((new RequestHandler($method, $this->callUrl, $extra))->callApi());
     }
 }

@@ -10,13 +10,28 @@ namespace HashemiRafsan\GithubApiz\Http;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request as Ps7Request;
+
 
 class RequestHandler
 {
     public $http;
 
-    public function __construct($url)
+    public $method;
+
+    public $headers = [];
+
+    public $parameters = [];
+
+    public function __construct($method, $url, $extra = [])
     {
-        $this->http = new Client(['base_url' => $url, 'timeout' => 3.0, 'decode_content' => false]);
+        $this->http = new Client(['base_url' => $url, 'timeout' => 10.0, 'decode_content' => false]);
+        $this->method = $method;
+        $this->request = new Ps7Request($method, $url, $extra);
+    }
+
+    public function callApi()
+    {
+        return $this->http->send($this->request)->getBody()->getContents();
     }
 }
