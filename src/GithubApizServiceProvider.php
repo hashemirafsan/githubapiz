@@ -6,7 +6,7 @@
  * Time: 12:06 PM
  */
 
-namespace HashemiRafsan\Githubapiz;
+namespace HashemiRafsan\GithubApiz;
 
 use Illuminate\Support\ServiceProvider;
 use HashemiRafsan\GithubApiz\Facades\GithubApiz as GithubFacade;

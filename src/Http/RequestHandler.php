@@ -19,15 +19,23 @@ class RequestHandler
 
     public $method;
 
+    public $url;
+
     public $headers = [];
 
     public $parameters = [];
 
+    public $extra = [];
+
+    public $decodeContent = false;
+
+    public $timeout = 10.0;
+
     public function __construct($method, $url, $extra = [])
     {
-        $this->http = new Client(['base_url' => $url, 'timeout' => 10.0, 'decode_content' => false]);
         $this->method = $method;
-        $this->request = new Ps7Request($method, $url, $extra);
+        $this->url = $url;
+        $this->extra = $extra;
     }
 
     /**
@@ -36,6 +44,27 @@ class RequestHandler
      */
     public function callApi()
     {
+        $this->initHTTP();
+        $this->parseExtra();
+        $this->request = new Ps7Request($this->method, $this->url, $this->headers);
         return $this->http->send($this->request)->getBody()->getContents();
+    }
+
+
+
+    private function parseExtra()
+    {
+        foreach($this->extra as $key => $value) {
+            $this->{$key}[] = $value;
+        }
+    }
+
+    private function initHTTP()
+    {
+        $this->http = new Client([
+            'base_url' => $this->url,
+            'timeout' => $this->timeout,
+            'decode_content' => $this->decodeContent
+        ]);
     }
 }
