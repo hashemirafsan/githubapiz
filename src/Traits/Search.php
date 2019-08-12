@@ -19,7 +19,9 @@ trait Search
     {
         $this->callUrl = $this->getSearchRepositoriesUrl();
         return $this->callRequest('GET', [
-            'Accept' => 'application/vnd.github.mercy-preview+json'
+            'headers' => [
+                'Accept' => 'application/vnd.github.mercy-preview+json'
+            ]
         ]);
     }
 
@@ -30,7 +32,9 @@ trait Search
     {
         $this->callUrl = $this->getSearchCommitsUrl();
         return $this->callRequest('GET', [
-            'Accept' => 'application/vnd.github.cloak-preview',
+            'headers' => [
+                'Accept' => 'application/vnd.github.cloak-preview',
+            ]
         ]);
     }
 
@@ -41,7 +45,9 @@ trait Search
     {
         $this->callUrl = $this->getSearchIssuesUrl();
         return $this->callRequest('GET', [
-            'Accept' => 'application/vnd.github.symmetra-preview+json'
+            'headers' => [
+                'Accept' => 'application/vnd.github.symmetra-preview+json'
+            ]
         ]);
     }
 
@@ -58,7 +64,9 @@ trait Search
     {
         $this->callUrl = $this->getSearchTopicsUrl();
         return $this->callRequest('GET', [
-            'Accept' => 'application/vnd.github.mercy-preview+json'
+            'headers' => [
+                'Accept' => 'application/vnd.github.mercy-preview+json'
+            ]
         ]);
     }
 
@@ -78,7 +86,9 @@ trait Search
     {
         $this->callUrl = $this->getSearchLabelsUrl();
         return $this->callRequest('GET', [
-            'Accept' => 'application/vnd.github.symmetra-preview+json'
+            'headers' => [
+                'Accept' => 'application/vnd.github.symmetra-preview+json'
+            ]
         ]);
     }
 

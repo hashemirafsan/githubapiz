@@ -9,7 +9,21 @@
 namespace HashemiRafsan\GithubApiz\Traits;
 
 
+use HashemiRafsan\GithubApiz\Interfaces\RepositoryInterface;
+
 trait Repositories
 {
-
+    public function getRepositories()
+    {
+        $this->callUrl = $this->getRepositoriesUrl();
+        $this->callRequest('GET', [
+            'headers' => [
+                'Accept' => 'application/json'
+            ]
+        ]);
+    }
+    public function getRepositoriesUrl()
+    {
+        return $this->getBaseUrl() . RepositoryInterface::GET_REPOSITORIES;
+    }
 }

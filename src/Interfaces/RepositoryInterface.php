@@ -11,5 +11,5 @@ namespace HashemiRafsan\GithubApiz\Interfaces;
 
 interface RepositoryInterface
 {
-    const
+    const GET_REPOSITORIES = "/repositories";
 }

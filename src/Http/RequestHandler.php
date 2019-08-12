@@ -47,6 +47,7 @@ class RequestHandler
         $this->initHTTP();
         $this->parseExtra();
         $this->request = new Ps7Request($this->method, $this->url, $this->headers);
+//        dd($this->request);
         return $this->http->send($this->request)->getBody()->getContents();
     }
 
@@ -55,7 +56,9 @@ class RequestHandler
     private function parseExtra()
     {
         foreach($this->extra as $key => $value) {
-            $this->{$key}[] = $value;
+            foreach($value as $valueKey => $valueItem) {
+                $this->{$key}[$valueKey] = $valueItem;
+            }
         }
     }
 
