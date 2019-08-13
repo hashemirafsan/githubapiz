@@ -31,6 +31,10 @@ class RequestHandler
 
     public $timeout = 10.0;
 
+    public $authorization = false;
+
+    public $authorizationKey = false;
+
     public function __construct($method, $url, $extra = [])
     {
         $this->method = $method;
@@ -46,8 +50,9 @@ class RequestHandler
     {
         $this->initHTTP();
         $this->parseExtra();
+        $this->addAuthorizationTokenToHeader();
         $this->request = new Ps7Request($this->method, $this->url, $this->headers);
-//        dd($this->request);
+//        dd($this->http->send($this->request)->getBody()->getContents());
         return $this->http->send($this->request)->getBody()->getContents();
     }
 
@@ -56,9 +61,12 @@ class RequestHandler
     private function parseExtra()
     {
         foreach($this->extra as $key => $value) {
-            foreach($value as $valueKey => $valueItem) {
-                $this->{$key}[$valueKey] = $valueItem;
+            if (is_array($value)) {
+                foreach($value as $valueKey => $valueItem) {
+                    $this->{$key}[$valueKey] = $valueItem;
+                }
             }
+            $this->{$key} = $value;
         }
     }
 
@@ -69,5 +77,22 @@ class RequestHandler
             'timeout' => $this->timeout,
             'decode_content' => $this->decodeContent
         ]);
+    }
+
+    private function addAuthorizationTokenToHeader()
+    {
+        if ($this->authorization) {
+            $this->headers['Authorization'] = "token " . $this->getAuthorizationKey();
+        }
+    }
+
+    public function setAuthorizationKey($key)
+    {
+        $this->authorizationKey = $key;
+    }
+
+    public function getAuthorizationKey()
+    {
+        return $this->authorizationKey ? :config('githubapiz.access_token');
     }
 }

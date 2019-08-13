@@ -11,4 +11,5 @@ namespace HashemiRafsan\GithubApiz\Interfaces;
 
 interface UserInterface
 {
+    const GET_USER_REPOS = "/user/repos";
 }

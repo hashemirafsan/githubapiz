@@ -8,6 +8,7 @@
 
 namespace HashemiRafsan\GithubApiz;
 
+use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
 use HashemiRafsan\GithubApiz\Facades\GithubApiz as GithubFacade;
 
@@ -15,12 +16,23 @@ class GithubApizServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-
+        $this->registerConfig();
     }
 
     public function register()
     {
         $this->registerGithubApiz();
+    }
+
+    protected function registerConfig()
+    {
+        $source = realpath(__DIR__ . '/../config/githubapiz.php');
+
+        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
+            $this->publishes([$source => config_path('githubapiz.php')]);
+        }
+
+        $this->mergeConfigFrom($source, 'githubapiz');
     }
 
     protected function registerGithubApiz()
