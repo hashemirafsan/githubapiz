@@ -24,7 +24,7 @@ trait Repositories
         ]);
     }
 
-    public function getOrgnizationRepositoriesByUsername($username)
+    public function getOrgnaizationRepositoriesByUsername($username)
     {
         $this->callUrl = $this->getOrgnizationRepositoriesByUsernameUrl($username);
         return $this->callRequest('GET');

@@ -13,6 +13,7 @@ use Error;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request as Ps7Request;
+use HashemiRafsan\GithubApiz\Exceptions\TokenMisMatchException;
 
 
 class RequestHandler
@@ -103,7 +104,11 @@ class RequestHandler
 
     public function getAuthorizationKey()
     {
-        return $this->authorizationKey ? :config('githubapiz.access_token');
+        $token = $this->authorizationKey ? :config('githubapiz.access_token');
+        if (blank($token)) {
+            throw new TokenMisMatchException("Github access token is not set yet!");
+        }
+        return $token;
     }
 
     public function setParameters($parameters = [])
