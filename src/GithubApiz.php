@@ -8,6 +8,7 @@
 
 namespace HashemiRafsan\GithubApiz;
 
+use HashemiRafsan\GithubApiz\Collections\GithubCollection;
 use HashemiRafsan\GithubApiz\Http\RequestHandler;
 use HashemiRafsan\GithubApiz\Traits\Repositories;
 use HashemiRafsan\GithubApiz\Traits\Search;
@@ -49,6 +50,6 @@ class GithubApiz
      */
     public function callRequest($method, $extra = [])
     {
-        return json_decode((new RequestHandler($method, $this->callUrl, $extra))->callApi());
+        return collect((new RequestHandler($method, $this->callUrl, $extra))->callApi());
     }
 }

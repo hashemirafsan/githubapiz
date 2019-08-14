@@ -43,8 +43,7 @@ class RequestHandler
     }
 
     /**
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array
      */
     public function callApi()
     {
@@ -52,8 +51,12 @@ class RequestHandler
         $this->parseExtra();
         $this->addAuthorizationTokenToHeader();
         $this->request = new Ps7Request($this->method, $this->url, $this->headers);
-//        dd($this->http->send($this->request)->getBody()->getContents());
-        return $this->http->send($this->request)->getBody()->getContents();
+        return json_decode($this->http->send($this->request)->getBody()->getContents());
+        // TODO: make it collection
+//        return [
+//            "data" => json_decode($this->http->send($this->request)->getBody()->getContents()),
+//            "request" => $this->request
+//        ];
     }
 
 

@@ -7,5 +7,5 @@
  */
 
 return [
-    'access_token' => env('GITHUB_ACCESS_TOKEN', false)
+    'access_token' => env('GITHUB_ACCESS_TOKEN', 'af75903eb3b34a26bf640662ececea02d5214dc2')
 ];
