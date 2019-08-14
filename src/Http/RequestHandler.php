@@ -53,7 +53,7 @@ class RequestHandler
         $this->initHTTP();
         $this->parseExtra();
         $this->addAuthorizationTokenToHeader();
-        if ($this->method === 'POST' && !blank($this->parameters)) {
+        if (in_array($this->method, ['POST', 'PATCH']) && !blank($this->parameters)) {
             $this->request = new Ps7Request($this->method, $this->url, $this->headers, json_encode($this->parameters));
         } else {
             $this->request = new Ps7Request($this->method, $this->url, $this->headers);

@@ -11,5 +11,6 @@ namespace HashemiRafsan\GithubApiz\Interfaces;
 
 interface RepositoryInterface
 {
-    const GET_REPOSITORIES = "/repositories";
+    const GET_PUBLIC_REPOSITORIES = "/repositories";
+    const GET_OWNER_REPO = "/repos/:owner/:repo";
 }
