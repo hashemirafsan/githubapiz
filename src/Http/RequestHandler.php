@@ -9,7 +9,9 @@
 namespace HashemiRafsan\GithubApiz\Http;
 
 
+use Error;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request as Ps7Request;
 
 
@@ -50,8 +52,13 @@ class RequestHandler
         $this->initHTTP();
         $this->parseExtra();
         $this->addAuthorizationTokenToHeader();
-        $this->request = new Ps7Request($this->method, $this->url, $this->headers);
-        return json_decode($this->http->send($this->request)->getBody()->getContents());
+        if ($this->method === 'POST' && !blank($this->parameters)) {
+            $this->request = new Ps7Request($this->method, $this->url, $this->headers, json_encode($this->parameters));
+        } else {
+            $this->request = new Ps7Request($this->method, $this->url, $this->headers);
+        }
+        $response = json_decode($this->http->send($this->request)->getBody()->getContents());
+        return $response;
         // TODO: make it collection
 //        return [
 //            "data" => json_decode($this->http->send($this->request)->getBody()->getContents()),
@@ -97,5 +104,15 @@ class RequestHandler
     public function getAuthorizationKey()
     {
         return $this->authorizationKey ? :config('githubapiz.access_token');
+    }
+
+    public function setParameters($parameters = [])
+    {
+        $this->parameters = $parameters;
+    }
+
+    public function getParameters()
+    {
+        return $this->parameters;
     }
 }

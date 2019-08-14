@@ -15,6 +15,15 @@ use HashemiRafsan\GithubApiz\Interfaces\UserInterface;
 
 trait Repositories
 {
+    public function createOwnRepository($parameters = [])
+    {
+        $this->callUrl = $this->getOwnRepositoriesUrl();
+        return $this->callRequest('POST', [
+           'authorization' => true,
+           'parameters' =>  $parameters
+        ]);
+    }
+
     public function getOrgnizationRepositoriesByUsername($username)
     {
         $this->callUrl = $this->getOrgnizationRepositoriesByUsernameUrl($username);
