@@ -8,6 +8,7 @@
 
 namespace HashemiRafsan\GithubApiz\Traits;
 
+use HashemiRafsan\GithubApiz\Interfaces\HeadersInterface;
 use HashemiRafsan\GithubApiz\Interfaces\SearchInterface;
 
 trait Search
@@ -20,7 +21,7 @@ trait Search
         $this->callUrl = $this->getSearchRepositoriesUrl();
         return $this->callRequest('GET', [
             'headers' => [
-                'Accept' => 'application/vnd.github.mercy-preview+json'
+                'Accept' => HeadersInterface::VND_GITHUB_MERCY_PREVIEW_JSON
             ]
         ]);
     }
@@ -33,7 +34,7 @@ trait Search
         $this->callUrl = $this->getSearchCommitsUrl();
         return $this->callRequest('GET', [
             'headers' => [
-                'Accept' => 'application/vnd.github.cloak-preview',
+                'Accept' => HeadersInterface::VND_GITHUB_CLOAK_PREVIEW,
             ]
         ]);
     }
@@ -46,7 +47,7 @@ trait Search
         $this->callUrl = $this->getSearchIssuesUrl();
         return $this->callRequest('GET', [
             'headers' => [
-                'Accept' => 'application/vnd.github.symmetra-preview+json'
+                'Accept' => HeadersInterface::VND_GITHUB_SYMMETRA_PREVIEW_JSON
             ]
         ]);
     }
@@ -65,7 +66,7 @@ trait Search
         $this->callUrl = $this->getSearchTopicsUrl();
         return $this->callRequest('GET', [
             'headers' => [
-                'Accept' => 'application/vnd.github.mercy-preview+json'
+                'Accept' => HeadersInterface::VND_GITHUB_MERCY_PREVIEW_JSON
             ]
         ]);
     }
@@ -87,7 +88,7 @@ trait Search
         $this->callUrl = $this->getSearchLabelsUrl();
         return $this->callRequest('GET', [
             'headers' => [
-                'Accept' => 'application/vnd.github.symmetra-preview+json'
+                'Accept' => HeadersInterface::VND_GITHUB_SYMMETRA_PREVIEW_JSON
             ]
         ]);
     }

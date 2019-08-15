@@ -8,13 +8,14 @@
 
 namespace HashemiRafsan\GithubApiz\Traits;
 
-
-use HashemiRafsan\GithubApiz\Interfaces\OrganizationInterface;
-use HashemiRafsan\GithubApiz\Interfaces\RepositoryInterface;
-use HashemiRafsan\GithubApiz\Interfaces\UserInterface;
+use HashemiRafsan\GithubApiz\Exceptions\NullableValueException;
+use HashemiRafsan\GithubApiz\Interfaces\HeadersInterface;
+use HashemiRafsan\GithubApiz\Traits\ApiUrls\RepositoriesUrl;
 
 trait Repositories
 {
+    use RepositoriesUrl;
+
     protected $owner = null;
 
     protected $repo = null;
@@ -39,6 +40,14 @@ trait Repositories
         return $this->repo;
     }
 
+    public function setOwnerAndRepo($owner, $repo)
+    {
+        $this->setOwner($owner);
+        $this->setRepo($repo);
+
+        return $this;
+    }
+
     /*-----------------------------------------------
     -
     -
@@ -46,13 +55,44 @@ trait Repositories
     -
     -
     ------------------------------------------------*/
-    public function updateOwnerRepoTopics($owner, $repo, $parameters = [])
+    /**
+     * @param array $parameters
+     *
+     * @return mixed
+     * @throws NullableValueException
+     */
+    public function updateTopics($parameters = [])
     {
+        return $this->updateOwnerRepoTopics(null, null, $parameters);
+    }
+
+    /**
+     * @param null $owner
+     * @param null $repo
+     * @param array $parameters
+     *
+     * @return mixed
+     * @throws NullableValueException
+     */
+    public function updateOwnerRepoTopics($owner = null, $repo = null, $parameters = [])
+    {
+        if (blank($owner) && !blank($this->getOwner())) {
+            $owner = $this->getOwner();
+        } else {
+            throw new NullableValueException("Owner value should be string, pass null");
+        }
+
+        if (blank($repo) && !blank($this->getRepo())) {
+            $repo = $this->getRepo();
+        } else {
+            throw new NullableValueException("Repo value should be string, pass null");
+        }
+
         $this->callUrl = $this->getOwnerRepoTopicsUrl($owner, $repo);
         return $this->callRequest('PUT', [
             'authorization' => true,
             'headers' => [
-                'Accept' => "application/vnd.github.mercy-preview+json"
+                'Accept' => HeadersInterface::VND_GITHUB_MERCY_PREVIEW_JSON
             ],
             'parameters' => $parameters
         ]);
@@ -63,7 +103,7 @@ trait Repositories
         $this->callUrl = $this->getOwnerRepoTopicsUrl($owner, $repo);
         return $this->callRequest('GET', [
             'headers' => [
-                'Accept' => "application/vnd.github.mercy-preview+json"
+                'Accept' => HeadersInterface::VND_GITHUB_MERCY_PREVIEW_JSON
             ]
         ]);
     }
@@ -150,65 +190,5 @@ trait Repositories
     {
         $this->callUrl = $this->getPublicRepositoriesUrl();
         return $this->callRequest('GET');
-    }
-
-
-    /*-----------------------------------------------
-    -
-    -
-    -                  URL
-    -
-    -
-    ------------------------------------------------*/
-    public function getOwnerRepoTopicsUrl($owner, $repo)
-    {
-        $setUrlPath = str_replace(':owner', $owner, RepositoryInterface::GET_OWNER_REPO_TOPICS);
-        $setUrlPath = str_replace(':repo', $repo, $setUrlPath);
-        return $this->getBaseUrl() . $setUrlPath;
-    }
-
-    public function getOwnerRepositoryUrl($owner, $repo)
-    {
-        $setUrlPath = str_replace(':owner', $owner, RepositoryInterface::GET_OWNER_REPO);
-        $setUrlPath = str_replace(':repo', $repo, $setUrlPath);
-        return $this->getBaseUrl() . $setUrlPath;
-    }
-
-    /**
-     * @param $username
-     *
-     * @return string
-     */
-    public function getOrganizationRepositoriesByUsernameUrl($username)
-    {
-        $withUsernamePath = str_replace(':org', $username, OrganizationInterface::GET_ORGANIZATION_REPOS_BY_NAME);
-        return $this->getBaseUrl() . $withUsernamePath;
-    }
-
-    /**
-     * @param $username
-     *
-     * @return string
-     */
-    public function getUserRepositoriesByUsernameUrl($username)
-    {
-        $withUsernamePath = str_replace(':username', $username, UserInterface::GET_USERS_REPOS_BY_USERNAME);
-        return $this->getBaseUrl() . $withUsernamePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getOwnRepositoriesUrl()
-    {
-        return $this->getBaseUrl() . UserInterface::GET_USER_REPOS;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPublicRepositoriesUrl()
-    {
-        return $this->getBaseUrl() . RepositoryInterface::GET_PUBLIC_REPOSITORIES;
     }
 }
