@@ -15,6 +15,30 @@ use HashemiRafsan\GithubApiz\Interfaces\UserInterface;
 
 trait Repositories
 {
+    protected $owner = null;
+
+    protected $repo = null;
+
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    public function setRepo($repo)
+    {
+        $this->repo = $repo;
+    }
+
+    public function getRepo()
+    {
+        return $this->repo;
+    }
+
     /*-----------------------------------------------
     -
     -
@@ -22,6 +46,28 @@ trait Repositories
     -
     -
     ------------------------------------------------*/
+    public function updateOwnerRepoTopics($owner, $repo, $parameters = [])
+    {
+        $this->callUrl = $this->getOwnerRepoTopicsUrl($owner, $repo);
+        return $this->callRequest('PUT', [
+            'authorization' => true,
+            'headers' => [
+                'Accept' => "application/vnd.github.mercy-preview+json"
+            ],
+            'parameters' => $parameters
+        ]);
+    }
+
+    public function getOwnerRepoTopics($owner, $repo)
+    {
+        $this->callUrl = $this->getOwnerRepoTopicsUrl($owner, $repo);
+        return $this->callRequest('GET', [
+            'headers' => [
+                'Accept' => "application/vnd.github.mercy-preview+json"
+            ]
+        ]);
+    }
+
     /**
      * @param $owner
      * @param $repo
@@ -29,7 +75,7 @@ trait Repositories
      *
      * @return mixed
      */
-    public function updateOwnerRepository($owner, $repo, $parameters = [])
+    public function updateOwnerRepository($owner = "", $repo = "", $parameters = [])
     {
         $this->callUrl = $this->getOwnerRepositoryUrl($owner, $repo);
         return $this->callRequest('PATCH', [
@@ -114,6 +160,12 @@ trait Repositories
     -
     -
     ------------------------------------------------*/
+    public function getOwnerRepoTopicsUrl($owner, $repo)
+    {
+        $setUrlPath = str_replace(':owner', $owner, RepositoryInterface::GET_OWNER_REPO_TOPICS);
+        $setUrlPath = str_replace(':repo', $repo, $setUrlPath);
+        return $this->getBaseUrl() . $setUrlPath;
+    }
 
     public function getOwnerRepositoryUrl($owner, $repo)
     {

@@ -13,4 +13,5 @@ interface RepositoryInterface
 {
     const GET_PUBLIC_REPOSITORIES = "/repositories";
     const GET_OWNER_REPO = "/repos/:owner/:repo";
+    const GET_OWNER_REPO_TOPICS = self::GET_OWNER_REPO . '/topics';
 }

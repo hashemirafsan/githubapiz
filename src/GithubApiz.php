@@ -25,6 +25,8 @@ class GithubApiz
 
     protected $client;
 
+    protected $data = "";
+
     /**
      * @param $url
      */
