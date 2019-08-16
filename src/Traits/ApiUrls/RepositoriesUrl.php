@@ -15,13 +15,64 @@ use HashemiRafsan\GithubApiz\Interfaces\UserInterface;
 
 trait RepositoriesUrl
 {
-    public function getOwnerRepoTopicsUrl($owner, $repo)
+    public function getOwnerRepoTagsUrl($owner, $repo)
     {
-        $setUrlPath = str_replace(':owner', $owner, RepositoryInterface::GET_OWNER_REPO_TOPICS);
-        $setUrlPath = str_replace(':repo', $repo, $setUrlPath);
-        return $this->getBaseUrl() . $setUrlPath;
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_TAGS;
     }
 
+    public function getOwnerRepoTeamsUrl($owner, $repo)
+    {
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_TEAMS;
+    }
+
+    public function getOwnerRepoLanguageUrl($owner, $repo)
+    {
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_LANGUAGE;
+    }
+
+    public function getOwnerRepoContributorsListUrl($owner, $repo)
+    {
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_CONTRIBUTORS;
+    }
+    /**
+     * @param $owner
+     * @param $repo
+     *
+     * @return string
+     */
+    public function getOwnerRepoAutomatedSecurityFixesUrl($owner, $repo)
+    {
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_AUTOMATED_SECURITY_FIX;
+    }
+
+    /**
+     * @param $owner
+     * @param $repo
+     *
+     * @return string
+     */
+    public function getOwnerRepoVulnerabilityUrl($owner, $repo)
+    {
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_VULNERABILITY;
+    }
+
+    /**
+     * @param $owner
+     * @param $repo
+     *
+     * @return string
+     */
+    public function getOwnerRepoTopicsUrl($owner, $repo)
+    {
+        return $this->getOwnerRepositoryUrl($owner, $repo) . RepositoryInterface::GET_OWNER_REPO_TOPICS;
+    }
+
+    /**
+     * @param $owner
+     * @param $repo
+     *
+     * @return string
+     */
     public function getOwnerRepositoryUrl($owner, $repo)
     {
         $setUrlPath = str_replace(':owner', $owner, RepositoryInterface::GET_OWNER_REPO);

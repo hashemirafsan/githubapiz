@@ -10,6 +10,7 @@ namespace HashemiRafsan\GithubApiz\Traits;
 
 use HashemiRafsan\GithubApiz\Exceptions\NullableValueException;
 use HashemiRafsan\GithubApiz\Interfaces\HeadersInterface;
+use HashemiRafsan\GithubApiz\Interfaces\HttpVerbsInterface;
 use HashemiRafsan\GithubApiz\Traits\ApiUrls\RepositoriesUrl;
 
 trait Repositories
@@ -23,6 +24,7 @@ trait Repositories
     public function setOwner($owner)
     {
         $this->owner = $owner;
+        return $this;
     }
 
     public function getOwner()
@@ -33,6 +35,7 @@ trait Repositories
     public function setRepo($repo)
     {
         $this->repo = $repo;
+        return $this;
     }
 
     public function getRepo()
@@ -40,21 +43,158 @@ trait Repositories
         return $this->repo;
     }
 
-    public function setOwnerAndRepo($owner, $repo)
+    public function setOwnerAndRepo($owner, $repo, $reuse)
     {
-        $this->setOwner($owner);
-        $this->setRepo($repo);
-
+        if (!$reuse) {
+            $this->setOwner($owner);
+            $this->setRepo($repo);
+        }
         return $this;
     }
 
-    /*-----------------------------------------------
-    -
-    -
-    -                  REQUEST
-    -
-    -
-    ------------------------------------------------*/
+    private function checkOwnerAndRepoExists()
+    {
+        if (blank($this->getOwner())) {
+            throw new NullableValueException("Owner value should be string, pass null");
+        }
+
+        if (blank($this->getRepo())) {
+            throw new NullableValueException("Repo value should be string, pass null");
+        }
+    }
+
+    public function getTags()
+    {
+        return $this->getOwnerRepoTags(null, null, true);
+    }
+
+    public function getOwnerRepoTags($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoTagsUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::GET);
+    }
+
+    public function getTeams()
+    {
+        return $this->getOwnerRepoTeams(null, null, true);
+    }
+
+    public function getOwnerRepoTeams($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoTeamsUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::GET);
+    }
+
+    public function getLanguages()
+    {
+        return $this->getOwnerRepoLanguages(null, null, true);
+    }
+
+    public function getOwnerRepoLanguages($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoLanguageUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::GET);
+    }
+
+    public function getContributorsList()
+    {
+        return $this->getOwnerRepoContributorsList(null, null, true);
+    }
+
+    public function getOwnerRepoContributorsList( $owner = null, $repo = null, $reuse = false )
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoContributorsListUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::GET);
+    }
+
+    public function disableAutomatedSecurityFixed()
+    {
+        return $this->disableOwnerRepoAutomatedSecurityFixes(null, null, true);
+    }
+
+    public function disableOwnerRepoAutomatedSecurityFixes($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoAutomatedSecurityFixesUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::DELETE, [
+            'authorization' => true,
+            'headers' => [
+                'Accept' => HeadersInterface::VND_GITHUB_LONDON_PREVIEW_JSON
+            ]
+        ]);
+    }
+
+    public function enableAutomatedSecurityFixed()
+    {
+        return $this->enableOwnerRepoAutomatedSecurityFixes(null, null, true);
+    }
+
+    public function enableOwnerRepoAutomatedSecurityFixes($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoAutomatedSecurityFixesUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::PUT, [
+            'authorization' => true,
+            'headers' => [
+                'Accept' => HeadersInterface::VND_GITHUB_LONDON_PREVIEW_JSON
+            ]
+        ]);
+    }
+
+    public function disableVulnerabilityAlert()
+    {
+        return $this->enableOwnerRepoVulnerabilityAlert(null, null, true);
+    }
+
+    public function disableOwnerRepoVulnerabilityAlert($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoVulnerabilityUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::DELETE, [
+            'authorization' => true,
+            'headers' => [
+                'Accept' => HeadersInterface::VND_GITHUB_DORIAN_PREVIEW_JSON
+            ]
+        ]);
+    }
+
+    public function enableVulnerabilityAlert()
+    {
+        return $this->enableOwnerRepoVulnerabilityAlert(null, null, true);
+    }
+
+    public function enableOwnerRepoVulnerabilityAlert($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoVulnerabilityUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::PUT, [
+            'authorization' => true,
+            'headers' => [
+                'Accept' => HeadersInterface::VND_GITHUB_DORIAN_PREVIEW_JSON
+            ]
+        ]);
+    }
+
+    public function getVulnerability()
+    {
+        return $this->getOwnerRepoVulnerability(null, null, true);
+    }
+
+    public function getOwnerRepoVulnerability($owner = null, $repo = null, $reuse = false)
+    {
+        $this->setOwnerAndRepo($owner, $repo, $reuse)->checkOwnerAndRepoExists();
+        $this->callUrl = $this->getOwnerRepoVulnerabilityUrl($this->getOwner(), $this->getRepo());
+        return $this->callRequest(HttpVerbsInterface::GET, [
+            'authorization' => true,
+            'headers' => [
+                'Accept' => HeadersInterface::VND_GITHUB_DORIAN_PREVIEW_JSON
+            ]
+        ]);
+    }
     /**
      * @param array $parameters
      *

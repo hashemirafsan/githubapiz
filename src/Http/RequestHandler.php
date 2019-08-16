@@ -58,7 +58,11 @@ class RequestHandler
         } else {
             $this->request = new Ps7Request($this->method, $this->url, $this->headers);
         }
-        $response = json_decode($this->http->send($this->request)->getBody()->getContents());
+        try {
+            $response = json_decode($this->http->send($this->request)->getBody()->getContents());
+        } catch (\Exception $e) {
+            $response = $e->getMessage();
+        }
         return $response;
         // TODO: make it collection
 //        return [
